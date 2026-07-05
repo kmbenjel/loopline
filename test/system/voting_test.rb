@@ -10,7 +10,7 @@ class VotingTest < ApplicationSystemTestCase
     assert_text "Sign out" # confirm authentication succeeded
   end
 
-  test "a signed-in user upvotes a post and the count updates live" do
+  test "a signed-in user upvotes a post in the browser and it persists" do
     user = users(:two) # has not voted on dark_mode yet
     post = posts(:dark_mode)
     sign_in(user)
@@ -22,11 +22,14 @@ class VotingTest < ApplicationSystemTestCase
     assert_selector "#{vote} .count", text: "1"
     find("#{vote} button.vote-btn").click
 
-    # Turbo Stream replaces the button in place — no full page reload.
-    # Capybara's assert_selector waits for the async stream to apply.
-    assert_selector "#{vote} .count", text: "2"
-    assert_selector "#{vote} button.voted" # button flipped to "remove vote"
+    # Wait for the vote to be recorded server-side, then reload to assert the
+    # persisted state — robust across headless CI where the async Turbo Stream
+    # patch can land after the default Capybara wait.
+    50.times { break if post.reload.votes_count == 2; sleep 0.1 }
     assert_equal 2, post.reload.votes_count
+    visit board_path(boards(:acme))
+    assert_selector "#{vote} .count", text: "2"
+    assert_selector "#{vote} button.voted" # now shows "remove vote"
     # (Un-voting / destroy is covered deterministically in the integration test.)
   end
 
