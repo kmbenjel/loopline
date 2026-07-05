@@ -1,0 +1,53 @@
+<% content_for :title, @board.name %>
+
+<div class="page-head">
+  <div>
+    <h1><%= @board.name %></h1>
+    <% if @board.description.present? %><p><%= @board.description %></p><% end %>
+  </div>
+  <div class="nav">
+    <%= link_to "Roadmap", roadmap_board_path(@board), class: "btn btn-ghost" %>
+    <% if authenticated? && @board.user == Current.user %>
+      <%= link_to "Edit", edit_board_path(@board), class: "btn btn-ghost btn-sm" %>
+      <%= button_to "Delete", board_path(@board), method: :delete, class: "btn btn-ghost btn-sm",
+            form: { data: { turbo_confirm: "Delete this board and all its posts?" } } %>
+    <% end %>
+  </div>
+</div>
+
+<% if authenticated? %>
+  <div class="card" style="margin-bottom:24px;">
+    <h3 style="margin-top:0;">Suggest something</h3>
+    <%= form_with model: [@board, (@post || Post.new)], url: board_posts_path(@board) do |f| %>
+      <% if @post&.errors&.any? %>
+        <div class="errors">
+          <ul>
+            <% @post.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="form-field">
+        <%= f.label :title, "Title" %>
+        <%= f.text_field :title, required: true, maxlength: 120, placeholder: "Short summary of your idea" %>
+      </div>
+      <div class="form-field">
+        <%= f.label :description, "Details (optional)" %>
+        <%= f.text_area :description, maxlength: 2000, rows: 3 %>
+      </div>
+      <%= f.submit "Post feedback", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card" style="margin-bottom:24px;">
+    <p class="muted" style="margin:0;"><%= link_to "Sign in", new_session_path %> to post feedback and vote.</p>
+  </div>
+<% end %>
+
+<h3>Ideas <span class="muted">(<%= @posts.size %>)</span></h3>
+<div id="posts">
+  <% if @posts.any? %>
+    <%= render @posts %>
+  <% else %>
+    <p class="muted">No ideas yet — be the first.</p>
+  <% end %>
+</div>

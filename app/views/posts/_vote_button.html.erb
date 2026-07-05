@@ -1,0 +1,18 @@
+<div id="<%= dom_id(post, :vote) %>" class="vote-box">
+  <% if !authenticated? %>
+    <%= link_to new_session_path, class: "vote-btn", title: "Sign in to vote" do %>
+      <span class="arrow">▲</span>
+      <span class="count"><%= post.votes_count %></span>
+    <% end %>
+  <% elsif post.voted_by?(Current.user) %>
+    <%= button_to post_vote_path(post), method: :delete, class: "vote-btn voted", title: "Remove your vote" do %>
+      <span class="arrow">▲</span>
+      <span class="count"><%= post.votes_count %></span>
+    <% end %>
+  <% else %>
+    <%= button_to post_vote_path(post), method: :post, class: "vote-btn", title: "Upvote" do %>
+      <span class="arrow">▲</span>
+      <span class="count"><%= post.votes_count %></span>
+    <% end %>
+  <% end %>
+</div>

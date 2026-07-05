@@ -1,0 +1,14 @@
+<div class="post-row" id="<%= dom_id(post) %>">
+  <%= render "posts/vote_button", post: post %>
+  <div class="post-body">
+    <h3><%= link_to post.title, post_path(post) %></h3>
+    <% if post.description.present? %>
+      <p><%= truncate(post.description, length: 160) %></p>
+    <% end %>
+    <div class="post-meta">
+      <span class="badge badge-<%= post.status %>"><%= post.status_label %></span>
+      <span>by <%= post.user.email_address.split("@").first %></span>
+      <span><%= time_ago_in_words(post.created_at) %> ago</span>
+    </div>
+  </div>
+</div>

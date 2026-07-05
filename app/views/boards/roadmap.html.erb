@@ -1,0 +1,28 @@
+<% content_for :title, "#{@board.name} — Roadmap" %>
+
+<div class="page-head">
+  <div>
+    <h1><%= @board.name %> — Roadmap</h1>
+    <p>What's planned, in progress, and shipped.</p>
+  </div>
+  <%= link_to "← Board", board_path(@board), class: "btn btn-ghost" %>
+</div>
+
+<div class="roadmap-cols">
+  <% { planned: "Planned", in_progress: "In progress", done: "Done" }.each do |key, label| %>
+    <div class="roadmap-col">
+      <h3><span class="badge badge-<%= key %>"><%= label %></span></h3>
+      <% posts = @columns[key] %>
+      <% if posts.any? %>
+        <% posts.each do |post| %>
+          <div class="card" style="padding:12px; margin-bottom:10px;">
+            <%= link_to post.title, post_path(post), style: "color:var(--text); font-weight:600;" %>
+            <div class="board-meta">▲ <%= post.votes_count %></div>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="empty">Nothing here yet.</p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

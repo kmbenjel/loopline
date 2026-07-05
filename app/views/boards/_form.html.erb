@@ -1,0 +1,23 @@
+<% if board.errors.any? %>
+  <div class="errors">
+    Please fix the following:
+    <ul>
+      <% board.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: board do |f| %>
+  <div class="form-field">
+    <%= f.label :name %>
+    <%= f.text_field :name, required: true, autofocus: true, maxlength: 80 %>
+  </div>
+  <div class="form-field">
+    <%= f.label :description, "Description (optional)" %>
+    <%= f.text_area :description, maxlength: 500 %>
+  </div>
+  <div class="form-actions">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", (board.persisted? ? board_path(board) : boards_path), class: "muted" %>
+  </div>
+<% end %>

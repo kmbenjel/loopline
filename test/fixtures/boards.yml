@@ -1,0 +1,11 @@
+acme:
+  user: one
+  name: Acme Feedback
+  slug: acme-feedback
+  description: Ideas for Acme.
+
+beta:
+  user: two
+  name: Beta Feedback
+  slug: beta-feedback
+  description: Ideas for Beta.

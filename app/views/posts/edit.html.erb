@@ -1,0 +1,28 @@
+<% content_for :title, "Edit post" %>
+
+<div class="page-head"><h1>Edit post</h1></div>
+
+<div class="card">
+  <% if @post.errors.any? %>
+    <div class="errors">
+      <ul>
+        <% @post.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @post do |f| %>
+    <div class="form-field">
+      <%= f.label :title %>
+      <%= f.text_field :title, required: true, maxlength: 120 %>
+    </div>
+    <div class="form-field">
+      <%= f.label :description %>
+      <%= f.text_area :description, maxlength: 2000 %>
+    </div>
+    <div class="form-actions">
+      <%= f.submit "Save", class: "btn btn-primary" %>
+      <%= link_to "Cancel", post_path(@post), class: "muted" %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,33 @@
+<% content_for :title, "Sign up" %>
+
+<div class="card form-narrow" style="margin: 0 auto;">
+  <h1 style="margin-top:0;">Create your account</h1>
+
+  <% if @user.errors.any? %>
+    <div class="errors">
+      Please fix the following:
+      <ul>
+        <% @user.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with url: registration_path, model: @user, scope: :user do |f| %>
+    <div class="form-field">
+      <%= f.label :email_address, "Email" %>
+      <%= f.email_field :email_address, required: true, autofocus: true, autocomplete: "username" %>
+    </div>
+    <div class="form-field">
+      <%= f.label :password %>
+      <%= f.password_field :password, required: true, autocomplete: "new-password", minlength: 8 %>
+    </div>
+    <div class="form-field">
+      <%= f.label :password_confirmation, "Confirm password" %>
+      <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
+    </div>
+    <div class="form-actions">
+      <%= f.submit "Sign up", class: "btn btn-primary" %>
+      <span class="muted">Already have an account? <%= link_to "Sign in", new_session_path %></span>
+    </div>
+  <% end %>
+</div>

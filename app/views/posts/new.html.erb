@@ -1,0 +1,28 @@
+<% content_for :title, "New post" %>
+
+<div class="page-head"><h1>New post — <%= @board.name %></h1></div>
+
+<div class="card">
+  <% if @post.errors.any? %>
+    <div class="errors">
+      <ul>
+        <% @post.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: [@board, @post], url: board_posts_path(@board) do |f| %>
+    <div class="form-field">
+      <%= f.label :title %>
+      <%= f.text_field :title, required: true, maxlength: 120, autofocus: true %>
+    </div>
+    <div class="form-field">
+      <%= f.label :description, "Details (optional)" %>
+      <%= f.text_area :description, maxlength: 2000 %>
+    </div>
+    <div class="form-actions">
+      <%= f.submit "Post feedback", class: "btn btn-primary" %>
+      <%= link_to "Cancel", board_path(@board), class: "muted" %>
+    </div>
+  <% end %>
+</div>

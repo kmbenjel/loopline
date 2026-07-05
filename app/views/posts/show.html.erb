@@ -1,0 +1,39 @@
+<% content_for :title, @post.title %>
+
+<p class="muted"><%= link_to "← #{@post.board.name}", board_path(@post.board) %></p>
+
+<div class="post-row" style="align-items:flex-start;">
+  <%= render "posts/vote_button", post: @post %>
+  <div class="post-body">
+    <h1 style="margin:0 0 8px; font-size:1.4rem;"><%= @post.title %></h1>
+    <div class="post-meta" style="margin-bottom:12px;">
+      <span class="badge badge-<%= @post.status %>"><%= @post.status_label %></span>
+      <span>by <%= @post.user.email_address.split("@").first %></span>
+      <span><%= @post.created_at.to_fs(:long) %></span>
+    </div>
+    <% if @post.description.present? %>
+      <div style="white-space:pre-wrap;"><%= @post.description %></div>
+    <% end %>
+  </div>
+</div>
+
+<% if authenticated? && @post.board.user == Current.user %>
+  <div class="card" style="margin-top:20px;">
+    <h3 style="margin-top:0;">Roadmap status <span class="muted">(board owner)</span></h3>
+    <div class="form-actions" style="flex-wrap:wrap;">
+      <% Post.statuses.each_key do |status| %>
+        <%= button_to Post::STATUS_LABELS[status], status_post_path(@post), method: :patch,
+              params: { status: status },
+              class: "btn btn-sm #{@post.status == status ? 'btn-primary' : 'btn-ghost'}" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% if authenticated? && @post.user == Current.user %>
+  <div class="form-actions" style="margin-top:20px;">
+    <%= link_to "Edit", edit_post_path(@post), class: "btn btn-ghost btn-sm" %>
+    <%= button_to "Delete", post_path(@post), method: :delete, class: "btn btn-ghost btn-sm",
+          form: { data: { turbo_confirm: "Delete this post?" } } %>
+  </div>
+<% end %>

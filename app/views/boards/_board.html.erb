@@ -1,0 +1,7 @@
+<%= link_to board_path(board), class: "card board-card" do %>
+  <h3><%= board.name %></h3>
+  <% if board.description.present? %>
+    <p><%= truncate(board.description, length: 140) %></p>
+  <% end %>
+  <div class="board-meta"><%= pluralize(board.posts.size, "post") %></div>
+<% end %>

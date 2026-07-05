@@ -1,0 +1,25 @@
+<% content_for :title, "Boards" %>
+
+<div class="page-head">
+  <div>
+    <h1>Feedback boards</h1>
+    <p>Collect ideas, let people vote, and share what you're building.</p>
+  </div>
+  <% if authenticated? %>
+    <%= link_to "New board", new_board_path, class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<% if @boards.any? %>
+  <%= render @boards %>
+<% else %>
+  <div class="card">
+    <p class="muted" style="margin:0;">No boards yet.
+      <% if authenticated? %>
+        <%= link_to "Create the first one", new_board_path %>.
+      <% else %>
+        <%= link_to "Sign up", new_registration_path %> to create one.
+      <% end %>
+    </p>
+  </div>
+<% end %>

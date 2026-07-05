@@ -1,0 +1,15 @@
+dark_mode:
+  board: acme
+  user: one
+  title: Dark mode
+  description: Please add a dark theme.
+  status: 1
+  votes_count: 1
+
+integrations:
+  board: acme
+  user: two
+  title: Slack integration
+  description: Notify a channel on new feedback.
+  status: 0
+  votes_count: 0
